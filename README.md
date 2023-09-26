@@ -1,5 +1,5 @@
 # DaviLab
-## API Interoperável para comunicação entre sistemas da área da saúde.
+## Sistema de gerenciamento laboratorial de compartilhamento de resultados de exames com pacientes na plataforma de auto-cuidado Davi.
 ## Projeto em desenvolvimento por Dantony Donato em parceria com a startup Intersection para o Trabalho de Conclusão de Curso com o objetivo de adqurir o título de grau Bacharel em Informática Biomédica pela Faculdade de Medicina de Ribeirão Preto - Universidade de São Paulo. 2023.
 ### Tecnologias utilizadas:
 - HTML 5
