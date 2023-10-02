@@ -23,6 +23,9 @@ class Login extends CI_Controller {
         // Load language
         $this->load->helper('language');
         $this->lang->load('variaveis_lang', 'portuguese');
+
+        $this->load->helper('form');
+        $this->load->helper('security');
     } 
 
 	public function index(){
@@ -170,125 +173,74 @@ class Login extends CI_Controller {
         $code_challenge = $codes['code_challenge'];
 
         $url = $this->lang->line('authorize_url') . 'response_type=code&code_challenge=' . $code_challenge . '&code_challenge_method=S256&client_id=' . $client_id . '&redirect_uri=' . $this->lang->line('dominio');
-        // $options = array(
-        //     'http' => array(
-        //         'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
-        //         'method'  => 'POST',
-        //         'Accept' => '*/*',
-        //         'Host' => $this->lang->line('dominio'),
-        //         // 'Accept-Encoding' => 'gzip, deflate, br',
-        //         //'Postman-Token' => 'e41f0e69-0d68-49bb-946b-691fdcb03d1f'
-        //         // 'content' => http_build_query($data)
-        //     )
-        // );
-        // $context  = stream_context_create($options);
-        // $result = file_get_contents($url, false, $context);
-        // if ($result === FALSE) {}
 
-        // $code_token = substr($result, 12, 32);
+        $session_code = array (
+            'client_id' => $this->lang->line('client_id'),
+            'client_secret' => $this->lang->line('client_secret'),
+            'code_verifier' => $codes['code_verifier'],
+            'code_challenge' => $codes['code_challenge']
+        );
+        $this->session->set_userdata($session_code);
 
-        // $post_url = 'https://uspdigital.usp.br/wsusuario/oauth/authorize?oauth_token=' . $oauth_token . '&callback_id=15&oauth_token_secret=' . $oauth_token_secret;
-
-        // $this->output->set_output($result);
-
-        // return $result;
-
-        echo $url;
+        $this->output->set_output($url);
     }
 
     public function request_token() {
         // Pegar dados que retornam da pagina de login usuario->usp
-        $code = $this->input->post('code');
+        $client_id = $this->session->userdata('client_id'); // 1
+        $client_secret = $this->session->userdata('client_secret'); // 2
+        $code_verifier = $this->session->userdata('code_verifier'); // 3
+        $code_challenge = $this->session->userdata('code_challenge'); // 4
+        $code = $this->input->post('code'); // var 6
 
-        echo $code;
-        // $method = 'POST';
-        // $urls = 'https://uspdigital.usp.br/wsusuario/oauth/access_token';
-        // $consumer_key = "fmrp_2";
-        // $nonce = $this->generateRandomString();
-        // $consumer_secret = "jCVQfIwxItOLekZuDliblXU2uob7JQG1QgxSgXhS";
-        // $oauth_signature_method = "HMAC-SHA1";
-        // $timestamps = time();
-        // $oauth_version = "1.0";
+        // $url = $this->lang->line('request_token_url') . 'client_id=' . $client_id . '&client_secret=' . $client_secret . '&code_verifier=' . $code_verifier . '&code_challenge=' . $code_challenge . '&code=' . $code;
+        $url = $this->lang->line('request_token_url');
 
-        // $signature_final = $this->generateOauthSignature($method, $urls, $consumer_key, $nonce, $oauth_signature_method, $timestamps, $oauth_version, $consumer_secret, $oauth_token, $oauth_token_secret, $oauth_verifier);
+        $data_request = array(
+            'client_id' => $this->session->userdata('client_id'), // 1
+            'client_secret' => $this->session->userdata('client_secret'), // 2
+            'code_verifier' => $this->session->userdata('code_verifier'), // 3
+            'code_challenge' => $this->session->userdata('code_challenge'), // 4
+            'code' => $code,
+            'redirect_uri' => $this->lang->line('dominio'),
+            "grant_type" => "authorization_code",
+        );
 
-        // $url = 'https://uspdigital.usp.br/wsusuario/oauth/access_token?oauth_consumer_key=fmrp_2&oauth_token='.$oauth_token.'&oauth_signature_method=HMAC-SHA1&oauth_timestamp='.$timestamps.'&oauth_nonce='.$nonce.'&oauth_version=1.0&oauth_callback=15&oauth_verifier='.$oauth_verifier.'&oauth_signature='.$signature_final;
-        
-        // $options = array(
-        //     'http' => array(
-        //         'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
-        //         'method'  => 'POST',
-        //         'Accept' => '*/*',
-        //         'Host' => 'uspdigital.usp.br',
-        //         //'Postman-Token' => 'e41f0e69-0d68-49bb-946b-691fdcb03d1f'
-        //         //'content' => http_build_query($data)
-        //     )
-        // );
-        // $context  = stream_context_create($options);
-        // $result = file_get_contents($url, false, $context);
-        // if ($result === FALSE) {};
-
-        // $NEW_oauth_token = substr($result, 12, 32);
-        // $NEW_oauth_token_secret = substr($result, 64, 32);
-
-        // $tokens = array (
-        //     'oauth_token' => $NEW_oauth_token,
-        //     'oauth_token_secret' => $NEW_oauth_token_secret,
-        //     'oauth_verifier' => $oauth_verifier
-        // );
-
-        // $data = json_encode($tokens);
-
-        // $this->output->set_output($data);
-    }
-
-    public function resources () {
-        $tokens = json_decode($this->input->post('tokens'), true);
-
-        $method = 'POST';
-        $urls = 'https://uspdigital.usp.br/wsusuario/oauth/usuariousp';
-        $consumer_key = "fmrp_2";
-        $nonce = $this->generateRandomString();
-        $consumer_secret = "jCVQfIwxItOLekZuDliblXU2uob7JQG1QgxSgXhS";
-        $oauth_signature_method = "HMAC-SHA1";
-        $timestamps = time();
-        $oauth_version = "1.0";
-
-        // Novos dados de oauth token e secret para obter dados do usuario
-        $oauth_token = $tokens['oauth_token'];
-        $oauth_token_secret = $tokens['oauth_token_secret'];
-        $oauth_verifier = $tokens['oauth_verifier'];
-
-        $NEW_signature = $this->generateOauthSignature($method, $urls, $consumer_key, $nonce, $oauth_signature_method, $timestamps, $oauth_version, $consumer_secret, $oauth_token, $oauth_token_secret, $oauth_verifier);
-
-        $url = 'https://uspdigital.usp.br/wsusuario/oauth/usuariousp?oauth_consumer_key=fmrp_2&oauth_token='.$oauth_token.'&oauth_signature_method=HMAC-SHA1&oauth_timestamp='.$timestamps.'&oauth_nonce='.$nonce.'&oauth_version=1.0&oauth_callback=15&oauth_verifier='.$oauth_verifier.'&oauth_signature='.$NEW_signature;        
-        
         $options = array(
             'http' => array(
                 'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
                 'method'  => 'POST',
                 'Accept' => '*/*',
-                'Host' => 'uspdigital.usp.br',
-                //'Postman-Token' => 'e41f0e69-0d68-49bb-946b-691fdcb03d1f'
-                //'content' => http_build_query($data)
+                // 'Host' => $this->lang->line('dominio'),
+                'content' => http_build_query($data_request)
             )
         );
 
         $context  = stream_context_create($options);
         $result = file_get_contents($url, false, $context);
+        if ($result === FALSE) {};
 
-        $userData = json_decode($result, true);
+        $this->output->set_output($result);
+    }
 
-        $validado = $this->login_model->check_login_usp($userData);
-        $this->output->set_output($validado);
-        // if($validado){
-        //     redirect('dashboard');
-        // }else{
-        //     $dados = array(
-        //         "alerta" => "Erro ao fazer login pela USP. Considere fazer login pelo próprio sistema ou entre em contato com os administradores"
-        //     );
-        //     $this->load->view('includes/html_header');
-        //     $this->load->view('login', $dados);
-        // }
+    public function resources () {
+        $access_token = $this->input->post('access_token');
+
+        $url = $this->lang->line('resource_url');
+
+        $options = array(
+            'http' => array(
+                'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+                'header'  => "Authorization: Bearer $access_token\r\n",
+                'method'  => 'GET',
+                'Accept' => '*/*',
+            )
+        );
+
+        $context  = stream_context_create($options);
+        $result = file_get_contents($url, false, $context);
+        if ($result === FALSE) {};
+
+        $this->output->set_output($result);
     }
 }
