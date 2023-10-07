@@ -76,4 +76,7 @@
     $lang['masculino'] = 'Masculino';
     $lang['feminino'] = 'Feminino';
     $lang['n_a'] = 'Prefiro não informar';
+
+    $lang['senha_sucesso'] = 'Senha alterada com sucesso!';
+    $lang['sucesso'] = 'Tudo certo!';
 ?>

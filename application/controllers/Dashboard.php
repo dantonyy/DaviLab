@@ -74,7 +74,7 @@ class Dashboard extends CI_Controller {
         }
     }
     
-    public function editar_funcionario($id_usuario_autenticacao=null){
+    public function editar_funcionario(){
         if($this->autenticarUsuario()){
             $this->lang->load(['variaveis_lang','dashboard_lang','errors_html_lang'], 'portuguese');
             
@@ -173,6 +173,18 @@ class Dashboard extends CI_Controller {
 		}
     }
 
+    public function verifica_senha() {
+        if($this->autenticarUsuario()){
+            $id_usuario_autenticacao = $this->session->userdata('id_usuario_autenticacao');
+            $senha_atual = $this->input->post('senha_atual');
+
+            $resultado = $this->dashboard_model->verificaSenha($id_usuario_autenticacao, $senha_atual);
+
+            $this->output->set_output($resultado);
+        }else{
+            redirect('login');
+        }
+    }
 // ================================================================================================
 // ========================================= -- UPDATE -- =========================================
 
@@ -231,6 +243,22 @@ class Dashboard extends CI_Controller {
         }
     }
 
+    public function mudar_senha() {
+        if($this->autenticarUsuario()){
+            $id_usuario_autenticacao = $this->session->userdata('id_usuario_autenticacao');
+
+            $dados = array (
+                'senha' => $this->input->post('nova_senha')
+            );
+
+            $resultado = $this->dashboard_model->mudarSenha($id_usuario_autenticacao, $dados);
+
+            $this->output->set_output($resultado);
+        }else{
+            redirect('login');
+        }
+    }
+
 // ================================================================================================
 // ========================================= -- DELETE -- =========================================
 
@@ -245,5 +273,7 @@ class Dashboard extends CI_Controller {
             return FALSE;
         }
     }
+
+    
 }
 ?>

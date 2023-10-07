@@ -24,5 +24,6 @@
     $lang['DL002'] = 'Atualizar tabela usuario_configuracao';
     $lang['DL003'] = 'Atualizar tabela laboratorio_possui_usuario';
     $lang['DL004'] = 'As senhas não coincidem';
+    $lang['DL005'] = 'Senha atual não coincide';
 
 ?>

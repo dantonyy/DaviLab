@@ -19,7 +19,7 @@ class Login_model extends CI_Model {
     public function validarLogin($email, $senha){
         $this->db->from('usuario_autenticacao');
         $this->db->where('usuario_autenticacao.email', $email);
-        $this->db->join('laboratorio_possui_usuario', 'laboratorio_possui_usuario.id_usuario_autenticacao = usuario_autenticacao.id_usuario_autenticacao_autenticacao');
+        $this->db->join('laboratorio_possui_usuario', 'laboratorio_possui_usuario.id_usuario_autenticacao = usuario_autenticacao.id_usuario_autenticacao');
         $this->db->join('laboratorio', 'laboratorio.id_laboratorio = laboratorio_possui_usuario.id_laboratorio');
         $this->db->join('laboratorio_papel', 'laboratorio_papel.id_laboratorio_papel = laboratorio_possui_usuario.papel');
 
@@ -29,17 +29,17 @@ class Login_model extends CI_Model {
             return "FALSE: usuario nao encontrado";
         }else{
             if($usuario->senha == $senha){
-                if ($usuario->ativo == 1) {
+                if ($usuario->status == 1) {
                     $session_data = array(
                         // Dados usuário
                         'id_usuario_autenticacao' => $usuario->id_usuario_autenticacao,
                         'nome' => $usuario->nome,
                         'sobrenome' => $usuario->sobrenome,
-                        'email' => $email,
-                        'celular' => $celular,
+                        'email' => $usuario->email,
+                        'celular' => $usuario->celular,
                         'data_criacao' => $usuario->data_criacao,
                         'papel' => $usuario->papel,
-                        'ativo' => $usuario->ativo,
+                        'status' => $usuario->status,
                         // Dados laboratório
                         'id_laboratorio' =>$usuario->id_laboratorio,
                         'nome_fantasia' => $usuario->nome_fantasia,
@@ -88,7 +88,7 @@ class Login_model extends CI_Model {
             'celular' => $session_data['celular'],
             'data_criacao' => $session_data['data_criacao'],
             'papel' => $session_data['papel'],
-            'ativo' => $session_data['ativo'],
+            'status' => $session_data['status'],
             // Dados laboratório
             'id_laboratorio' => $session_data['id_laboratorio'],
             'nome_fantasia' => $session_data['nome_fantasia'],

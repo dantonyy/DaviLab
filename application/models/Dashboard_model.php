@@ -125,9 +125,32 @@ class Dashboard_model extends CI_Model {
         }
     }
 
+    public function mudarSenha($id_usuario_autenticacao, $dados) {
+        $this->db->where('id_usuario_autenticacao', $id_usuario_autenticacao);
+
+        if($this->db->update('usuario_autenticacao', $dados)){
+            return TRUE;
+        }else{
+            return FALSE;
+        }
+    }
+
 // ================================================================================================
 // ========================================= -- DELETE -- =========================================
 
 // ================================================================================================
 // ========================================= -- OUTRAS -- =========================================
+    public function verificaSenha($id_usuario_autenticacao, $senha_atual){
+        $this->db->from('usuario_autenticacao');
+        $this->db->where('id_usuario_autenticacao', $id_usuario_autenticacao);
+        $this->db->select('senha');
+
+        $senha_cadastrada = $this->db->get()->row();
+        
+        if ($senha_cadastrada->senha == $senha_atual) {
+            return 'TRUE';
+        } else {
+            return 'FALSE';
+        }
+    }
 }

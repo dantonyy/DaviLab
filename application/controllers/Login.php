@@ -47,11 +47,13 @@ class Login extends CI_Controller {
 
     }
     
-	public function login($nome=NULL, $email=NULL, $celular=NULL){
+	public function login(){
         $email = $this->input->post('email');
         $senha = $this->input->post('senha');
         $validado = $this->login_model->validarLogin($email, $senha);
-        $this->output->set_output(json_encode($validado));
+        if ($this->output->set_output($validado) == 'TRUE') {
+            redirect('dashboard');
+        };
     }
 
     public function logout() {
@@ -61,11 +63,11 @@ class Login extends CI_Controller {
         redirect('login');
     }
 
-    public function recuperarSenha(){
-        $this->load->view('includes/html_header');
-        $this->load->view('login/recuperar_senha');
-        $this->load->view('includes/html_footer');
-    }
+    // public function recuperarSenha(){
+    //     $this->load->view('includes/html_header');
+    //     $this->load->view('login/recuperar_senha');
+    //     $this->load->view('includes/html_footer');
+    // }
 
     public function autenticarUsuario(){
         $logado = $this->session->userdata('logado');
