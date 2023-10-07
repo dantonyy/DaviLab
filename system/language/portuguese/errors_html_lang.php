@@ -17,4 +17,12 @@
     $lang['texto_erro_404'] = 'Por favor, ';
     $lang['link_login_404'] = 'volte por aqui.';
 
+// =================================================================================================
+// ========================================= -- DAVILAB -- =========================================
+
+    $lang['DL001'] = 'Atualizar tabela usuario_autenticacao';
+    $lang['DL002'] = 'Atualizar tabela usuario_configuracao';
+    $lang['DL003'] = 'Atualizar tabela laboratorio_possui_usuario';
+    $lang['DL004'] = 'As senhas não coincidem';
+
 ?>

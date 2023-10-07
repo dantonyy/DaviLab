@@ -33,14 +33,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <!-- Font Awesome Icons -->
         <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
 
+        <!-- =============== Comentado pois estava dando incompatibilidade com o tema do DaviLab =============== -->
         <!-- CSS Files -->
-        <link id="pagestyle" href="<?php echo base_url();?>assets/css/soft-ui-dashboard.css" rel="stylesheet" />
+        <!-- <link id="pagestyle" href="<?php echo base_url();?>assets/css/soft-ui-dashboard.css" rel="stylesheet" /> -->
+
         <!-- Core -->
         <script src="<?php echo base_url();?>assets/js/core/popper.min.js"></script>
         <script src="<?php echo base_url();?>assets/js/core/bootstrap.min.js"></script>
 
+        <!-- =============== Comentado pois estava dando incompatibilidade com o tema do DaviLab =============== -->
         <!-- Theme JS -->
-        <script src="<?php echo base_url();?>assets/js/soft-ui-dashboard.min.js"></script>
+        <!-- <script src="<?php echo base_url();?>assets/js/soft-ui-dashboard.min.js"></script> -->
 
         <!-- DataTables -->
         <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
