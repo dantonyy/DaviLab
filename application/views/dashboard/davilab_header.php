@@ -5,8 +5,8 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
     <!-- Favicons -->
-    <link href="<?php echo base_url();?>application/views/dashboard/assets/img/favicon.png" rel="icon">
-    <link href="<?php echo base_url();?>application/views/dashboard/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+    <link href="<?php echo base_url();?>application/views/dashboard/assets/img/icon.png" rel="icon">
+    <link href="<?php echo base_url();?>application/views/dashboard/assets/img/icon.png" rel="apple-touch-icon">
 
     <!-- Google Fonts -->
     <link href="https://fonts.gstatic.com" rel="preconnect">
@@ -39,7 +39,7 @@
 
         <div class="d-flex align-items-center justify-content-between">
             <a href="<?php echo site_url('dashboard/');?>" class="logo d-flex align-items-center">
-                <img src="<?php echo base_url();?>application/views/dashboard/assets/img/logo.png" alt="">
+                <img src="<?php echo base_url();?>application/views/dashboard/assets/img/icon.png" alt="">
                 <span class="d-none d-lg-block">
                     <?php echo lang('davilab');?>
                 </span>
@@ -80,45 +80,6 @@
                 You have 4 new notifications
                 <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
                 </li>
-                <li>
-                <hr class="dropdown-divider">
-                </li>
-
-                <li class="notification-item">
-                <i class="bi bi-exclamation-circle text-warning"></i>
-                <div>
-                    <h4>Lorem Ipsum</h4>
-                    <p>Quae dolorem earum veritatis oditseno</p>
-                    <p>30 min. ago</p>
-                </div>
-                </li>
-
-                <li>
-                <hr class="dropdown-divider">
-                </li>
-
-                <li class="notification-item">
-                <i class="bi bi-x-circle text-danger"></i>
-                <div>
-                    <h4>Atque rerum nesciunt</h4>
-                    <p>Quae dolorem earum veritatis oditseno</p>
-                    <p>1 hr. ago</p>
-                </div>
-                </li>
-
-                <li>
-                <hr class="dropdown-divider">
-                </li>
-
-                <li class="notification-item">
-                <i class="bi bi-check-circle text-success"></i>
-                <div>
-                    <h4>Sit rerum fuga</h4>
-                    <p>Quae dolorem earum veritatis oditseno</p>
-                    <p>2 hrs. ago</p>
-                </div>
-                </li>
-
                 <li>
                 <hr class="dropdown-divider">
                 </li>
@@ -211,7 +172,23 @@
         </li><!-- End Dashboard Nav -->
 
         
-        </li><!-- End Icons Nav -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href=”” onclick="request_code();return false;">
+            <i class="bi bi-people"></i>
+            <span>
+                <?php echo lang('consultar_pacientes');?>
+            </span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="<?php echo site_url('dashboard/novo_paciente');?>">
+            <i class="bi bi-people"></i>
+            <span>
+                <?php echo lang('precadastro_paciente');?>
+            </span>
+            </a>
+        </li>
 
         <li id="titulo_painel_adm" class="nav-heading">
             <?php echo lang('painel_adm');?>
@@ -253,7 +230,7 @@
                 <?php echo lang('configuracoes');?>
             </span>
             </a>
-        </li><!-- End Error 404 Page Nav -->
+        </li>
 
         </ul>
 
@@ -278,3 +255,17 @@
 
 <!-- Template Main JS File -->
 <script src="<?php echo base_url();?>application/views/dashboard/assets/js/main.js"></script>
+
+<script>
+    function request_code() {
+            $.ajaxSetup({async:false});
+            $.post("<?php echo site_url('auth/request_code');?>",{},
+                function(data, status) {
+                    if(data) {
+                        // console.log(data);
+                        location.replace(data);
+                    }
+                } // Fecha function
+            ); // fecha POST
+        }
+</script>

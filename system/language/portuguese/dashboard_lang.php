@@ -1,6 +1,9 @@
 <?php
     defined('BASEPATH') OR exit('No direct script access allowed');
-    
+
+// ------------------------------------------------------------------------------------------------------------------
+// ------------------------------------ LEMBRAR DE ORGANIZAR ESTE ARQUIVO -------------------------------------------
+
     $lang['inicio'] = 'Início';
 
 // ------------------------------------------------------------------------------------------------------------------
@@ -79,4 +82,42 @@
 
     $lang['senha_sucesso'] = 'Senha alterada com sucesso!';
     $lang['sucesso'] = 'Tudo certo!';
+
+    $lang['lista_pacientes'] = 'Lista de Pacientes';
+    $lang['pacientes'] = 'Pacientes';
+    $lang['cadastrados'] = 'Cadastrados';
+    $lang['vinculados'] = 'Vinculados';
+
+    $lang['dashboard'] = 'Dashboard';
+    $lang['acoes'] = 'Ações';
+
+
+    $lang['consultar_pacientes'] = 'Consultar pacientes';
+    $lang['acessar'] = 'Acessar';
+    $lang['buscar'] = 'Buscar';
+    $lang['buscar_paciente'] = 'Buscar paciente';
+
+    $lang['precadastro_paciente'] = 'Pré-Cadastrar paciente';
+
+    $lang['identificador_paciente'] = 'Identificador paciente';
+    $lang['tipo_identificador'] = 'Selecione o tipo do identificador:';
+
+    $lang['fechar'] = 'Fechar';
+
+    $lang['exames_realizados'] = 'Exames Realizados';
+    $lang['enviar_exame'] = 'Enviar Exame';
+
+    $lang['nome_exame'] = 'Nome do Exame';
+    $lang['profissional'] = 'Profissional';
+    $lang['data'] = 'Data';
+    $lang['data_exame'] = 'Data de realização do exame:';
+    $lang['comentario'] = 'Comentário:';
+    $lang['laudo'] = 'Laudo:';
+    $lang['opcional'] = '(Opcional)';
+    $lang['anexar_arquivo'] = 'Anexar Arquivo';
+    $lang['arquivo'] = 'Arquivo';
+
+    $lang['pendente'] = 'Pendente';
+    $lang['recusado'] = 'Recusado';
+    $lang['aceito'] = 'Aceito';
 ?>

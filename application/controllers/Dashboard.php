@@ -20,11 +20,13 @@ class Dashboard extends CI_Controller {
             $numero_semana = date('W', strtotime($data_atual));
             $id_usuario_autenticacao = $this->session->userdata('id_usuario_autenticacao');
 
+            $data['quantidade_pacientes'] = $this->dashboard_model->getQuantidadePacientes($this->session->userdata('id_laboratorio'));
+
             $this->lang->load('variaveis_lang', 'portuguese');
 
             $this->load->view('includes/html_header');
             $this->load->view('dashboard/davilab_header');
-            $this->load->view('dashboard/dashboard');
+            $this->load->view('dashboard/dashboard', $data);
 		}else{
 			redirect('login');
 		}
@@ -74,7 +76,7 @@ class Dashboard extends CI_Controller {
         }
     }
     
-    public function editar_funcionario(){
+    public function editar_funcionario($id_usuario_autenticacao){
         if($this->autenticarUsuario()){
             $this->lang->load(['variaveis_lang','dashboard_lang','errors_html_lang'], 'portuguese');
             
@@ -86,6 +88,46 @@ class Dashboard extends CI_Controller {
             $this->load->view('includes/html_header');
             $this->load->view('dashboard/davilab_header');
             $this->load->view('dashboard/editar_funcionario',$data);
+        }else{
+            redirect('login');
+        }
+    }
+
+    public function pacientes_lista(){
+        if($this->autenticarUsuario()){
+            $this->lang->load(['variaveis_lang','dashboard_lang','errors_html_lang'], 'portuguese');
+
+            $this->load->view('includes/html_header');
+            $this->load->view('dashboard/davilab_header');
+            $this->load->view('dashboard/pacientes_lista');
+        }else{
+            redirect('login');
+        }
+    }
+
+    public function novo_paciente(){
+        if($this->autenticarUsuario()){
+            $this->lang->load(['variaveis_lang','dashboard_lang','errors_html_lang'], 'portuguese');
+
+            $this->load->view('includes/html_header');
+            $this->load->view('dashboard/davilab_header');
+            $this->load->view('dashboard/novo_paciente');
+        }else{
+            redirect('login');
+        }
+    }
+
+    public function paciente_perfil(){
+        if($this->autenticarUsuario()){
+            // Carregar dados
+            $this->session->set_userdata($this->input->post('dados_paciente'));
+            
+            // Carregar página
+            $this->lang->load(['variaveis_lang','dashboard_lang','errors_html_lang'], 'portuguese');
+
+            $this->load->view('includes/html_header');
+            $this->load->view('dashboard/davilab_header');
+            $this->load->view('dashboard/paciente_perfil');
         }else{
             redirect('login');
         }
@@ -138,6 +180,14 @@ class Dashboard extends CI_Controller {
         }
     }
 
+    public function set_paciente() {
+        if($this->autenticarUsuario()){
+            
+        }else{
+            redirect('login');
+        }
+    }
+
 // =============================================================================================
 // ========================================= -- GET -- =========================================
 
@@ -184,6 +234,21 @@ class Dashboard extends CI_Controller {
         }else{
             redirect('login');
         }
+    }
+
+    public function verifica_paciente() {
+        $id_laboratorio = $this->session->userdata('id_laboratorio');
+        $id_paciente = $this->input->post('id_paciente');
+
+        $resultado = $this->dashboard_model->verificaPaciente($id_laboratorio, $id_paciente);
+        $this->output->set_output($resultado);
+    }
+
+    public function get_quantidade_pacientes() {
+        $id_laboratorio = $this->session->userdata('id_laboratorio');
+
+        $resultado = $this->dashboard_model->getQuantidadePacientes($id_laboratorio);
+        $this->output->set_output($resultado);
     }
 // ================================================================================================
 // ========================================= -- UPDATE -- =========================================

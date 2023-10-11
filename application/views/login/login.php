@@ -4,7 +4,7 @@
 	<!-- Includes do tema -->
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!--===============================================================================================-->	
-	<link rel="icon" type="image/png" href="<?php echo base_url();?>application/views/includes/assets/login_page/images/icons/favicon.ico"/>
+	<link href="<?php echo base_url();?>application/views/dashboard/assets/img/icon.png" rel="icon">
 	<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url();?>application/views/includes/assets/login_page/vendor/bootstrap/css/bootstrap.min.css">
 	<!--===============================================================================================-->
@@ -30,7 +30,7 @@
 			<div class="wrap-login100">
 
 				<div class="login100-pic js-tilt" data-tilt>
-					<img src="<?php echo base_url();?>application/views/includes/assets/login_page/images/login.png" alt="IMG">
+					<img src="<?php echo base_url();?>application/views/includes/assets/login_page/images/tubo.png" alt="IMG">
 				</div>
 
 				<form class="login100-form validate-form">

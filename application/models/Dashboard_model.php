@@ -92,6 +92,25 @@ class Dashboard_model extends CI_Model {
         return $resultado;
     }
 
+    public function verificaPaciente($id_laboratorio, $id_paciente) {
+        $this->db->where('id_laboratorio', $id_laboratorio);
+        $this->db->where('id_paciente', $id_paciente);
+        $result = $this->db->get('laboratorio_possui_paciente');
+
+        if ($result->num_rows() >= 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function getQuantidadePacientes($id_laboratorio) {
+        $this->db->where('id_laboratorio', $id_laboratorio);
+        $result = $this->db->get('laboratorio_possui_paciente');
+
+        return $result->num_rows();
+    }
+
 // ================================================================================================
 // ========================================= -- UPDATE -- =========================================
 
