@@ -5,7 +5,9 @@
     <h1>
         <?php echo lang('pacientes_lista');?>
     </h1>
-    <?php //echo var_dump($pacientes_lista_json)?>
+    <?php 
+        // echo var_dump($pacientes_lista[0]);
+    ?>
 </div>
 <!-- ================================================================================================================= -->
 <!-- ========================================== -- INICIO SECTION -- ================================================= -->
@@ -36,20 +38,20 @@
                         </thead>
                         <tbody id="table_todos_pacientes">
                             <?php
-                                foreach ($pacientes_lista_json as $paciente) {
+                                foreach ($pacientes_lista as $paciente) {
                                     echo '<tr>';
-                                    echo '<td>' . $paciente->nome . '</td>';
-                                    echo '<td>' . $paciente->sobrenome . '</td>';
-                                    echo '<td>' . $paciente->email . '</td>';
-                                    echo '<td>' . $paciente->celular .'</td>';
+                                    echo '<td>' . $paciente->name->given . '</td>';
+                                    echo '<td>' . $paciente->name->family . '</td>';
+                                    echo '<td>' . $paciente->telecom[0]->value . '</td>';
+                                    echo '<td>' . $paciente->telecom[1]->value .'</td>';
                                     echo '<td>';
                                     echo '<form method="post" action="'. site_url('dashboard/load_paciente_perfil/') . '">';
                                     echo '
-                                        <input style="display:none" name="paciente_id" value="' . $paciente->id_usuario_autenticacao . '"/>
-                                        <input style="display:none" name="paciente_nome" value="' . $paciente->nome . '"/>
-                                        <input style="display:none" name="paciente_sobrenome" value="' . $paciente->sobrenome . '"/>
-                                        <input style="display:none" name="paciente_email" value="' . $paciente->email . '"/>
-                                        <input style="display:none" name="paciente_celular" value="' . $paciente->celular . '"/>
+                                        <input style="display:none" name="paciente_id" value="' . $paciente->identifier->value . '"/>
+                                        <input style="display:none" name="paciente_nome" value="' . $paciente->name->given . '"/>
+                                        <input style="display:none" name="paciente_sobrenome" value="' . $paciente->name->family . '"/>
+                                        <input style="display:none" name="paciente_email" value="' . $paciente->telecom[0]->value . '"/>
+                                        <input style="display:none" name="paciente_celular" value="' . $paciente->telecom[0]->value . '"/>
                                         ';
                                     echo '<button class="btn" type="submit"><i class="bi bi-person"></i></button>';
                                     echo '</form>';

@@ -229,6 +229,22 @@ class Auth {
         return $pacientes_lista_json;
     }
 
+    public function getPacientesFHIR ($access_token,$id_laboratorio) {
+        $url = $this->ci->lang->line('endpoint_api_dados_pacientes_fhir') . '?id_laboratorio=' . $id_laboratorio;
+
+        $options = array(
+            'http' => array(
+                'method'  => 'GET',
+                'header' => 'Authorization: Bearer ' . $access_token
+            )
+        );
+
+        $context  = stream_context_create($options);
+        $pacientes_fhir = file_get_contents($url, false, $context);
+        if ($pacientes_fhir === FALSE) {};
+
+        return $pacientes_fhir;
+    }
 // FUNÇÃO PARA BUSCAR PACIENTE POR IDENTIFICADOR =======================================================================
     public function get_dados_paciente () {
         $access_token = $this->input->post('access_token');

@@ -98,9 +98,9 @@ class Dashboard_model extends CI_Model {
         $result = $this->db->get('laboratorio_possui_paciente');
 
         if ($result->num_rows() >= 1) {
-            return true;
+            return TRUE;
         } else {
-            return false;
+            return FALSE;
         }
     }
 

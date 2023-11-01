@@ -24,6 +24,7 @@
     $lang['request_token_url'] = "http://127.0.0.1:8000/auth/token/";
     
     // API Endpoints que retornam resources/recursos (dados requisitados)
+    $lang['endpoint_api_dados_pacientes_fhir'] = "http://127.0.0.1:8000/get_pacientes_fhir/";
     $lang['endpoint_api_dados_pacientes_lista'] = "http://127.0.0.1:8000/get_pacientes_lista/";
     $lang['endpoint_api_dados_paciente'] = "http://127.0.0.1:8000/get_paciente/";    
     $lang['endpoint_api_dados_exames_paciente'] = "http://127.0.0.1:8000/get_exame/";

@@ -93,11 +93,16 @@ class Dashboard extends CI_Controller {
             $access_token = $this->input->post('access_token');
             $id_laboratorio = $this->session->userdata('id_laboratorio');
 
-            $paciente_lista_json = json_decode($this->auth->get_pacientes_lista($access_token,$id_laboratorio));
-            // Script para verificar se o paciente que está vindo pela API é paciente do laboratorio
+            $paciente_lista_json = json_decode($this->auth->getPacientesFHIR($access_token,$id_laboratorio));
             
-            $data['pacientes_lista_json'] = json_decode($this->auth->get_pacientes_lista($access_token,$id_laboratorio));
-
+            $data['pacientes_lista'] = array();
+            // Script para verificar se o paciente que está recebendo da API é paciente do laboratório
+            foreach ($paciente_lista_json as $paciente) {
+                if ($this->verificaPaciente($paciente->identifier->value)) {
+                    array_push($data['pacientes_lista'], $paciente);
+                }
+            }
+            
             $data['pagina'] = 'pacientes_lista';
             $this->load->view('includes/html_header',$data);
             $this->load->view('dashboard/pacientes_lista',$data);
@@ -247,12 +252,12 @@ class Dashboard extends CI_Controller {
         }
     }
 
-    public function verifica_paciente() {
+    public function verificaPaciente($id_paciente) {
         $id_laboratorio = $this->session->userdata('id_laboratorio');
-        $id_paciente = $this->input->post('id_paciente');
 
         $resultado = $this->dashboard_model->verificaPaciente($id_laboratorio, $id_paciente);
-        $this->output->set_output($resultado);
+        // $this->output->set_output($resultado);
+        return $resultado;
     }
 
     public function get_quantidade_pacientes() {
