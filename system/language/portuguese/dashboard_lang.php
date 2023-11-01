@@ -83,7 +83,7 @@
     $lang['senha_sucesso'] = 'Senha alterada com sucesso!';
     $lang['sucesso'] = 'Tudo certo!';
 
-    $lang['lista_pacientes'] = 'Lista de Pacientes';
+    $lang['pacientes_lista'] = 'Lista de Pacientes';
     $lang['pacientes'] = 'Pacientes';
     $lang['cadastrados'] = 'Cadastrados';
     $lang['vinculados'] = 'Vinculados';
@@ -97,22 +97,23 @@
     $lang['buscar'] = 'Buscar';
     $lang['buscar_paciente'] = 'Buscar paciente';
 
-    $lang['precadastro_paciente'] = 'Pré-Cadastrar paciente';
+    $lang['novo_paciente'] = 'Pré-Cadastrar paciente';
 
     $lang['identificador_paciente'] = 'Identificador paciente';
     $lang['tipo_identificador'] = 'Selecione o tipo do identificador:';
 
     $lang['fechar'] = 'Fechar';
 
+    $lang['exames'] = 'Exames';
     $lang['exames_realizados'] = 'Exames Realizados';
     $lang['enviar_exame'] = 'Enviar Exame';
 
     $lang['nome_exame'] = 'Nome do Exame';
     $lang['profissional'] = 'Profissional';
     $lang['data'] = 'Data';
-    $lang['data_exame'] = 'Data de realização do exame:';
-    $lang['comentario'] = 'Comentário:';
-    $lang['laudo'] = 'Laudo:';
+    $lang['data_exame'] = 'Data de realização do exame';
+    $lang['comentario'] = 'Comentário';
+    $lang['laudo'] = 'Laudo';
     $lang['opcional'] = '(Opcional)';
     $lang['anexar_arquivo'] = 'Anexar Arquivo';
     $lang['arquivo'] = 'Arquivo';
@@ -120,4 +121,6 @@
     $lang['pendente'] = 'Pendente';
     $lang['recusado'] = 'Recusado';
     $lang['aceito'] = 'Aceito';
+
+    $lang['historico_exames'] = 'Histórico de Exames';
 ?>

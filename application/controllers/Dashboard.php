@@ -9,6 +9,9 @@ class Dashboard extends CI_Controller {
 
         // Load models
         $this->load->model('dashboard_model');
+
+        // Carrega biblioteca Auth
+        $this->load->library('auth');
     }
 
 // ==========================================================================================================
@@ -19,14 +22,11 @@ class Dashboard extends CI_Controller {
             $data_atual = date('Y-m-d');
             $numero_semana = date('W', strtotime($data_atual));
             $id_usuario_autenticacao = $this->session->userdata('id_usuario_autenticacao');
-
-            $data['quantidade_pacientes'] = $this->dashboard_model->getQuantidadePacientes($this->session->userdata('id_laboratorio'));
-
-            $this->lang->load('variaveis_lang', 'portuguese');
-
-            $this->load->view('includes/html_header');
-            $this->load->view('dashboard/davilab_header');
+            
+            $data['pagina'] = 'dashboard';
+            $this->load->view('includes/html_header',$data);
             $this->load->view('dashboard/dashboard', $data);
+            $this->load->view('includes/html_footer');
 		}else{
 			redirect('login');
 		}
@@ -34,12 +34,10 @@ class Dashboard extends CI_Controller {
 
     public function configuracoes(){
         if($this->autenticarUsuario()){
-            $this->lang->load(['variaveis_lang','dashboard_lang','errors_html_lang'], 'portuguese');
-
-
-            $this->load->view('includes/html_header');
-            $this->load->view('dashboard/davilab_header');
+            $data['pagina'] = 'configuracoes';
+            $this->load->view('includes/html_header',$data);
             $this->load->view('dashboard/configuracoes');
+            $this->load->view('includes/html_footer');
 		}else{
 			redirect('login');
 		}
@@ -47,14 +45,13 @@ class Dashboard extends CI_Controller {
 
     public function painel_adm(){
         if($this->autenticarUsuario()){
-            $this->lang->load(['variaveis_lang','dashboard_lang','errors_html_lang'], 'portuguese');
-
             $id_laboratorio = $this->session->userdata('id_laboratorio');
             $data['todos_funcionarios'] = $this->dashboard_model->getTodosFuncionarios($id_laboratorio);
 
-            $this->load->view('includes/html_header');
-            $this->load->view('dashboard/davilab_header');
+            $data['pagina'] = 'painel_adm';
+            $this->load->view('includes/html_header',$data);
             $this->load->view('dashboard/painel_adm',$data);
+            $this->load->view('includes/html_footer');
 		}else{
 			redirect('login');
 		}
@@ -62,15 +59,14 @@ class Dashboard extends CI_Controller {
 
     public function novo_funcionario(){
         if($this->autenticarUsuario()){
-            $this->lang->load(['variaveis_lang','dashboard_lang','errors_html_lang'], 'portuguese');
-            
             $id_laboratorio = $this->session->userdata('id_laboratorio');
 
             $data['todos_estados'] = $this->dashboard_model->getEstados();
 
-            $this->load->view('includes/html_header');
-            $this->load->view('dashboard/davilab_header');
+            $data['pagina'] = 'novo_funcionario';
+            $this->load->view('includes/html_header',$data);
             $this->load->view('dashboard/novo_funcionario',$data);
+            $this->load->view('includes/html_footer');
         }else{
             redirect('login');
         }
@@ -78,16 +74,15 @@ class Dashboard extends CI_Controller {
     
     public function editar_funcionario($id_usuario_autenticacao){
         if($this->autenticarUsuario()){
-            $this->lang->load(['variaveis_lang','dashboard_lang','errors_html_lang'], 'portuguese');
-            
             $id_laboratorio = $this->session->userdata('id_laboratorio');
 
             $data['todos_estados'] = $this->dashboard_model->getEstados();
             $data['dados_usuario'] = $this->dashboard_model->getDadosFuncionario($id_usuario_autenticacao);
 
-            $this->load->view('includes/html_header');
-            $this->load->view('dashboard/davilab_header');
+            $data['pagina'] = 'editar_funcionario';
+            $this->load->view('includes/html_header',$data);
             $this->load->view('dashboard/editar_funcionario',$data);
+            $this->load->view('includes/html_footer');
         }else{
             redirect('login');
         }
@@ -95,11 +90,18 @@ class Dashboard extends CI_Controller {
 
     public function pacientes_lista(){
         if($this->autenticarUsuario()){
-            $this->lang->load(['variaveis_lang','dashboard_lang','errors_html_lang'], 'portuguese');
+            $access_token = $this->input->post('access_token');
+            $id_laboratorio = $this->session->userdata('id_laboratorio');
 
-            $this->load->view('includes/html_header');
-            $this->load->view('dashboard/davilab_header');
-            $this->load->view('dashboard/pacientes_lista');
+            $paciente_lista_json = json_decode($this->auth->get_pacientes_lista($access_token,$id_laboratorio));
+            // Script para verificar se o paciente que está vindo pela API é paciente do laboratorio
+            
+            $data['pacientes_lista_json'] = json_decode($this->auth->get_pacientes_lista($access_token,$id_laboratorio));
+
+            $data['pagina'] = 'pacientes_lista';
+            $this->load->view('includes/html_header',$data);
+            $this->load->view('dashboard/pacientes_lista',$data);
+            $this->load->view('includes/html_footer');
         }else{
             redirect('login');
         }
@@ -107,30 +109,39 @@ class Dashboard extends CI_Controller {
 
     public function novo_paciente(){
         if($this->autenticarUsuario()){
-            $this->lang->load(['variaveis_lang','dashboard_lang','errors_html_lang'], 'portuguese');
 
-            $this->load->view('includes/html_header');
-            $this->load->view('dashboard/davilab_header');
+            $data['pagina'] = 'novo_paciente';
+            $this->load->view('includes/html_header',$data);
             $this->load->view('dashboard/novo_paciente');
+            $this->load->view('includes/html_footer');
         }else{
             redirect('login');
         }
     }
 
-    public function paciente_perfil(){
+    public function load_paciente_perfil(){
         if($this->autenticarUsuario()){
             // Carregar dados
-            $this->session->set_userdata($this->input->post('dados_paciente'));
-            
-            // Carregar página
-            $this->lang->load(['variaveis_lang','dashboard_lang','errors_html_lang'], 'portuguese');
+            $dados_paciente = array(
+                'paciente_id' => $this->input->post('paciente_id'),
+                'paciente_nome' => $this->input->post('paciente_nome'),
+                'paciente_sobrenome' => $this->input->post('paciente_sobrenome'),
+                'paciente_celular' => $this->input->post('paciente_celular'),
+                'paciente_email' => $this->input->post('paciente_email')
+            );
+            $this->session->set_userdata($dados_paciente);
 
-            $this->load->view('includes/html_header');
-            $this->load->view('dashboard/davilab_header');
-            $this->load->view('dashboard/paciente_perfil');
+            redirect($this->auth->get_code_paciente_exames());
         }else{
             redirect('login');
         }
+    }
+
+    public function paciente_perfil() {
+        $data['pagina'] = 'paciente_perfil';
+        $this->load->view('includes/html_header',$data);
+        $this->load->view('dashboard/paciente_perfil');
+        $this->load->view('includes/html_footer');
     }
 
 // =============================================================================================

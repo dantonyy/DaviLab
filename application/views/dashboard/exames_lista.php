@@ -3,9 +3,9 @@
 <!-- ========================================== -- TÍTULO DA PAGINA -- ================================================= -->
 <div class="pagetitle">
     <h1>
-        <?php echo lang('pacientes_lista');?>
+        <?php echo lang('historico_exames');?>
     </h1>
-    <?php //echo var_dump($pacientes_lista_json)?>
+    <?php echo var_dump($exames_lista_json);?>
 </div>
 <!-- ================================================================================================================= -->
 <!-- ========================================== -- INICIO SECTION -- ================================================= -->
@@ -14,43 +14,50 @@
         <div class="col-xxl-12 col-md-6">
             <div class="card">
                 <div class="card-body">
-                    <table id="div_table_todos_pacientes" class="table table-borderless datatable">
+                    <table class="table table-borderless datatable">
                         <thead>
-                            <tr>
-                                <th scope="col">
-                                    <?php echo lang('nome');?>
-                                </th>
-                                <th scope="col">
-                                    <?php echo lang('sobrenome');?>
-                                </th>
-                                <th scope="col">
-                                    <?php echo lang('email');?>
-                                </th>
-                                <th scope="col">
-                                    <?php echo lang('celular');?>
-                                </th>
-                                <th scope="col">
-                                    <?php echo lang('acoes');?>
-                                </th>
-                            </tr>
+                        <tr>
+                            <th scope="col">
+                                <?php echo lang('nome_exame');?>
+                            </th>
+                            <th scope="col">
+                                <?php echo lang('profissional');?>
+                            </th>
+                            <th scope="col">
+                                <?php echo lang('data');?>
+                            </th>
+                            <th scope="col">
+                                <?php echo lang('laudo');?>
+                            </th>
+                            <th scope="col">
+                                <?php echo lang('arquivo');?>
+                            </th>
+                            <th scope="col">
+                                <?php echo lang('status');?>
+                            </th>
+                        </tr>
                         </thead>
-                        <tbody id="table_todos_pacientes">
+                        <tbody id="table_todos_exames">
                             <?php
-                                foreach ($pacientes_lista_json as $paciente) {
+                                foreach ($exames_lista_json as $exame) {
                                     echo '<tr>';
-                                    echo '<td>' . $paciente->nome . '</td>';
-                                    echo '<td>' . $paciente->sobrenome . '</td>';
-                                    echo '<td>' . $paciente->email . '</td>';
-                                    echo '<td>' . $paciente->celular .'</td>';
+                                    echo '<td>' . $exame->nome_exame . '</td>';
+                                    echo '<td>' . $exame->profissional . '</td>';
+                                    echo '<td>' . $exame->data_realizacao . '</td>';
+                                    echo '<td>' . $exame->laudo .'</td>';
+                                    echo '<td>' . $exame->nome_arquivo .'</td>';
+                                    if ($exame->status_exame == 0) {
+                                        echo '<td><span class="badge bg-danger">'. lang('recusado') .'</span></td>';
+                                    }
+                                    if ($exame->status_exame == 1) {
+                                        echo '<td><span class="badge bg-warning">'. lang('pendente') .'</span></td>';
+                                    }
+                                    if ($exame->status_exame == 2) {
+                                        echo '<td><span class="badge bg-success">'. lang('aceito') .'</span></td>';
+                                    }
                                     echo '<td>';
                                     echo '<form method="post" action="'. site_url('dashboard/load_paciente_perfil/') . '">';
-                                    echo '
-                                        <input style="display:none" name="paciente_id" value="' . $paciente->id_usuario_autenticacao . '"/>
-                                        <input style="display:none" name="paciente_nome" value="' . $paciente->nome . '"/>
-                                        <input style="display:none" name="paciente_sobrenome" value="' . $paciente->sobrenome . '"/>
-                                        <input style="display:none" name="paciente_email" value="' . $paciente->email . '"/>
-                                        <input style="display:none" name="paciente_celular" value="' . $paciente->celular . '"/>
-                                        ';
+
                                     echo '<button class="btn" type="submit"><i class="bi bi-person"></i></button>';
                                     echo '</form>';
                                     echo '</td>';

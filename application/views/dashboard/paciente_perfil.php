@@ -7,7 +7,7 @@
     </h1>
 
     <?php
-        // echo var_dump($this->session->userdata('paciente_id'));
+        // echo var_dump($this->session->userdata());   
     ?>
     </div><!-- End Page Title -->
 
@@ -44,7 +44,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#exames_realizados" onclick="request_token_exames()">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#exames_realizados" onclick="get_token_exames_paciente()">
                             <?php echo lang('exames_realizados');?>
                         </button>
                     </li>
@@ -137,40 +137,40 @@
                     </div>
 
                     <div class="tab-pane fade pt-3" id="enviar_exame">
-                    <form>
-
+                    <form id="form_adicionar_exame" action="<?php echo base_url('exames/setExame')?>" enctype="multipart/form-data" method="post" accept-charset="UTF-8">
+                    <input style="display: none" name="id_paciente" value="<?php echo $this->session->userdata('paciente_id')?>"/>
                         <div class="row mb-3">
-                            <label for="inputText" class="col-sm-2 col-form-label">
+                            <label class="col-sm-2 col-form-label">
                                 <?php echo lang('nome_exame');?>
                             </label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control" name="nome_exame">
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label for="inputText" class="col-sm-2 col-form-label">
+                            <label class="col-sm-2 col-form-label">
                                 <?php echo lang('profissional');?>
                             </label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control" name="profissional">
                             </div>
                         </div>
 
                         <div class="row mb-3">
-                            <label for="inputEmail" class="col-sm-2 col-form-label">
+                            <label class="col-sm-2 col-form-label" name="data_exame">
                                 <?php echo lang('data_exame');?>
                             </label>
                             <div class="col-sm-10">
-                                <input type="date" class="form-control">
+                                <input type="date" class="form-control" name="data_exame">
                             </div>
                         </div>
 
                         <div class="row mb-3">
-                            <label for="inputNumber" class="col-sm-2 col-form-label">
+                            <label class="col-sm-2 col-form-label">
                                 <?php echo lang('arquivo');?>
                             </label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="file" id="formFile">
+                                <input class="form-control" type="file" accept=".pdf" id="file" name="file" required>
                             </div>
                         </div>
                         
@@ -179,14 +179,13 @@
                                 <?php echo lang('laudo');?>
                             </label>
                             <div class="col-sm-10">
-                                <textarea class="form-control" style="height: 100px" placeholder="<?php echo lang('opcional');?>"></textarea>
+                                <textarea name="laudo" class="form-control" style="height: 100px" placeholder="<?php echo lang('opcional');?>"></textarea>
                             </div>
                         </div>
                         
 
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" >
-
                             </label>
                             <div class="col-sm-10">
                                 <button type="submit" class="btn btn-primary">
@@ -208,20 +207,6 @@
 
 </main><!-- End #main -->
 
-    <!-- ======= Footer ======= -->
-<footer id="footer" class="footer">
-    <div class="copyright">
-    &copy; Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
-    </div>
-    <div class="credits">
-    <!-- All the links in the footer should remain intact. -->
-    <!-- You can delete the links only if you purchased the pro version. -->
-    <!-- Licensing information: https://bootstrapmade.com/license/ -->
-    <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-    Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-    </div>
-</footer><!-- End Footer -->
-
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
 <!-- Vendor JS Files -->
@@ -238,28 +223,25 @@
 <script src="<?php echo base_url();?>application/views/dashboard/assets/js/main.js"></script>
 
 <script>
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-
     // As funções de request na API foram separadas para especificar cada tipo de requisição
     // Requisições para lista de pacientes
-    function request_token_exames() {
+    function get_token_exames_paciente() {
         const code = urlParams.get('code'); // 6
-        $.post("<?php echo site_url('auth/request_token_exames');?>",{code:code},
+        $.post("<?php echo site_url('auth/get_token_exames_paciente');?>",{code:code},
             function(data, status) {
                 if(data) {
                     tokens = JSON.parse(data);
                     id_paciente = parseInt(document.getElementById('id_paciente').value);
-                    resource_exames_paciente(tokens['access_token'], id_paciente);
+                    get_dados_exames_paciente(tokens['access_token'], id_paciente);
                 }
             } // Fecha function
         ); // fecha POST
     }
 
-    function resource_exames_paciente(access_token, id_paciente) {
+    function get_dados_exames_paciente(access_token, id_paciente) {
         // REQUEST RESOURCES
         $.ajaxSetup({async:false});
-        $.post("<?php echo site_url('auth/resource_exames_paciente');?>",{access_token:access_token, id_paciente:id_paciente},
+        $.post("<?php echo site_url('auth/get_dados_exames_paciente');?>",{access_token:access_token, id_paciente:id_paciente},
             function(data, status) {
                 if(data) {
                     // console.log(data);
@@ -318,4 +300,51 @@
             table_todos_exames.appendChild(linha);
         }
     }
+
+    $('#form_adicionar_exame').submit(function(event) {
+        event.preventDefault(); // Previne que seja enviado com modo padrão
+
+        // Pega informações do formulário + anexa arquivo pra enviar post pro controller
+        const formData = new FormData(form_adicionar_exame);
+        formData.append('file', $('#file')[0].files[0]);
+
+        $.ajax({
+            url: '<?php echo site_url('exames/setExame/');?>',
+            type: 'POST',
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function(response) {
+                console.log(response);
+                // swal({
+                //     title: '<?php echo lang('tudo_certo')?>',
+                //     text: '<?php echo lang('tudo_certo_msg')?>',
+                //     icon: 'success',
+                //     buttons : {
+                //         confirm: {
+                //         className : 'btn btn-success'
+                //         }
+                //     }
+                // }).then(function(){ 
+                //     location.reload();
+                // });
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                swal({
+                    title: '<?php echo lang('erro')?>',
+                    text: '<?php echo lang('erro_msg')?>',
+                    icon: 'error',
+                    buttons : {
+                        confirm: {
+                        className : 'btn btn-danger'
+                        }
+                    }
+                }).then(function(){
+                    swal.close();
+                    location.reload();
+                });// fecha o swal
+            }
+        });
+    });
 </script>

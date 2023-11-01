@@ -40,8 +40,9 @@ class Login extends CI_Controller {
         if($this->autenticarUsuario()){
 			redirect('dashboard');
 		}else{
+            $data['pagina'] = 'login';
             $this->lang->load('variaveis_lang', 'portuguese');
-            $this->load->view('includes/html_header');
+            $this->load->view('includes/html_header',$data);
             $this->load->view('login/login'); 
 		}
 
@@ -51,9 +52,8 @@ class Login extends CI_Controller {
         $email = $this->input->post('email');
         $senha = $this->input->post('senha');
         $validado = $this->login_model->validarLogin($email, $senha);
-        if ($this->output->set_output($validado) == 'TRUE') {
-            redirect('dashboard');
-        };
+
+        $this->output->set_output($validado);
     }
 
     public function logout() {

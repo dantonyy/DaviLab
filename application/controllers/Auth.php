@@ -7,20 +7,9 @@ class Auth extends CI_Controller {
         $this->load->helper('language');
         $this->lang->load('variaveis_lang', 'portuguese');
     }
-// ================================================================================================
-// ========================================= -- SET -- ============================================
 
-// ================================================================================================
-// ========================================= -- GET -- ============================================
-
-// ================================================================================================
-// ========================================= -- UPDATE -- =========================================
-
-// ================================================================================================
-// ========================================= -- DELETE -- =========================================
-
-// ================================================================================================
-// ========================================= -- OUTRAS -- =========================================
+// =========================================================================================================
+// ========================================= -- GERAR CODIGO -- ============================================
 
     // Gera code_verifier e code_challenge para verificação do token
     public function generateCodes() {
@@ -53,14 +42,17 @@ class Auth extends CI_Controller {
         return $data;
     }
 
-    public function request_code() {
+// =========================================================================================================
+// ========================================= -- REQUEST CODE -- ============================================
+
+    public function get_code_dashboard_app() {
         $client_id = $this->lang->line('client_id');
         $secret = $this->lang->line('client_id');
         $codes = json_decode($this->generateCodes(), true);
         $code_verifier = $codes['code_verifier'];
         $code_challenge = $codes['code_challenge'];
 
-        $url = $this->lang->line('authorize_url') . 'response_type=code&code_challenge=' . $code_challenge . '&code_challenge_method=S256&client_id=' . $client_id . '&redirect_uri=' . $this->lang->line('oauth_endpoint');
+        $url = $this->lang->line('authorize_url') . 'response_type=code&code_challenge=' . $code_challenge . '&code_challenge_method=S256&client_id=' . $client_id . '&redirect_uri=' . $this->lang->line('endpoint_app_dashboard');
 
         $session_code = array (
             'client_id' => $this->lang->line('client_id'),
@@ -73,7 +65,10 @@ class Auth extends CI_Controller {
         $this->output->set_output($url);
     }
 
-    public function request_token() {
+// ==========================================================================================================
+// ========================================= -- REQUEST TOKEN -- ============================================
+
+    public function get_token_pacientes_lista() {
         // Pegar dados que retornam da pagina de login usuario->usp
         $client_id = $this->session->userdata('client_id'); // 1
         $client_secret = $this->session->userdata('client_secret'); // 2
@@ -89,7 +84,7 @@ class Auth extends CI_Controller {
             'code_verifier' => $this->session->userdata('code_verifier'), // 3
             'code_challenge' => $this->session->userdata('code_challenge'), // 4
             'code' => $code,
-            'redirect_uri' => $this->lang->line('oauth_endpoint'),
+            'redirect_uri' => $this->lang->line('endpoint_app_dashboard'),
             "grant_type" => "authorization_code",
         );
 
@@ -109,74 +104,7 @@ class Auth extends CI_Controller {
         $this->output->set_output($result);
     }
 
-    public function recources_lista_pacientes () {
-        $access_token = $this->input->post('access_token');
-        
-        $url = $this->lang->line('recources_lista_pacientes');
-
-        $options = array(
-            'http' => array(
-                'method'  => 'GET',
-                'header' => 'Authorization: Bearer ' . $access_token
-            )
-        );
-
-        $context  = stream_context_create($options);
-        $result = file_get_contents($url, false, $context);
-        if ($result === FALSE) {};
-
-        $this->output->set_output($result);
-    }
-
-    public function resource_paciente () {
-        $access_token = $this->input->post('access_token');
-        $identificador_paciente = $this->input->post('identificador_paciente');
-        $tipo_identificador = $this->input->post('tipo_identificador');
-
-        $url = $this->lang->line('resource_paciente') . '?identificador_paciente=' . $identificador_paciente . '&tipo_identificador=' . $tipo_identificador;
-
-        $options = array(
-            'http' => array(
-                'method'  => 'GET',
-                'header' => 'Authorization: Bearer ' . $access_token
-            )
-        );
-
-        $context  = stream_context_create($options);
-        $result = file_get_contents($url, false, $context);
-        if ($result === FALSE) {};
-
-        $this->output->set_output($result);
-    }
-
-    // ----------------------------------------------------------------
-
-    public function request_code_exames() {
-        $client_id = $this->lang->line('exames_id');
-        $secret = $this->lang->line('exames_secret');
-        $codes = json_decode($this->generateCodes(), true);
-        $code_verifier = $codes['code_verifier'];
-        $code_challenge = $codes['code_challenge'];
-
-        $url = $this->lang->line('authorize_url') . 'response_type=code&code_challenge=' . $code_challenge . '&code_challenge_method=S256&client_id=' . $client_id . '&redirect_uri=' . $this->lang->line('exames_endpoint');
-
-        $session_code = array (
-            'client_id' => $this->lang->line('exames_id'),
-            'client_secret' => $this->lang->line('exames_secret'),
-            'code_verifier' => $codes['code_verifier'],
-            'code_challenge' => $codes['code_challenge']
-        );
-        $this->session->set_userdata($session_code);
-
-        $this->output->set_output($url);
-    }
-
-    public function request_token_exames() {
-        // Pegar dados que retornam da pagina de login usuario->usp
-        $client_id = $this->session->userdata('exames_id'); // 1
-        $client_secret = $this->session->userdata('exames_secret'); // 2
-        $code_verifier = $this->session->userdata('code_verifier'); // 3
-        $code_challenge = $this->session->userdata('code_challenge'); // 4
+    public function get_token_exames_paciente() {
         $code = $this->input->post('code'); // var 6
 
         $url = $this->lang->line('request_token_url');
@@ -187,7 +115,7 @@ class Auth extends CI_Controller {
             'code_verifier' => $this->session->userdata('code_verifier'), // 3
             'code_challenge' => $this->session->userdata('code_challenge'), // 4
             'code' => $code,
-            'redirect_uri' => $this->lang->line('exames_endpoint'),
+            'redirect_uri' => $this->lang->line('endpoint_app_exames_paciente'),
             "grant_type" => "authorization_code",
         );
 
@@ -207,11 +135,85 @@ class Auth extends CI_Controller {
         $this->output->set_output($result);
     }
 
-    public function resource_exames_paciente () {
+    public function get_token_exames_lista() {
+        $code = $this->input->post('code'); // var 6
+
+        $url = $this->lang->line('request_token_url');
+
+        $data_request = array(
+            'client_id' => $this->session->userdata('client_id'), // 1
+            'client_secret' => $this->session->userdata('client_secret'), // 2
+            'code_verifier' => $this->session->userdata('code_verifier'), // 3
+            'code_challenge' => $this->session->userdata('code_challenge'), // 4
+            'code' => $code,
+            'redirect_uri' => $this->lang->line('endpoint_app_exames_lista'),
+            "grant_type" => "authorization_code",
+        );
+
+        $options = array(
+            'http' => array(
+                'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+                'method'  => 'POST',
+                'Accept' => '*/*',
+                'content' => http_build_query($data_request)
+            )
+        );
+
+        $context  = stream_context_create($options);
+        $result = file_get_contents($url, false, $context);
+        if ($result === FALSE) {};
+
+        $this->output->set_output($result);
+    }
+
+// =============================================================================================================
+// ========================================= -- RECURSOS (DADOS) -- ============================================
+
+    public function get_pacientes_lista () {
+        $access_token = $this->input->post('access_token');
+        
+        $url = $this->lang->line('endpoint_api_dados_pacientes_lista');
+
+        $options = array(
+            'http' => array(
+                'method'  => 'GET',
+                'header' => 'Authorization: Bearer ' . $access_token
+            )
+        );
+
+        $context  = stream_context_create($options);
+        $dados_pacientes = file_get_contents($url, false, $context);
+        if ($dados_pacientes === FALSE) {};
+
+        $this->output->set_output($dados_pacientes);
+    }
+
+    public function get_dados_paciente () {
+        $access_token = $this->input->post('access_token');
+        $identificador_paciente = $this->input->post('identificador_paciente');
+        $tipo_identificador = $this->input->post('tipo_identificador');
+
+        $url = $this->lang->line('endpoint_api_dados_paciente') . '?identificador_paciente=' . $identificador_paciente . '&tipo_identificador=' . $tipo_identificador;
+
+        $options = array(
+            'http' => array(
+                'method'  => 'GET',
+                'header' => 'Authorization: Bearer ' . $access_token
+            )
+        );
+
+        $context  = stream_context_create($options);
+        $result = file_get_contents($url, false, $context);
+        if ($result === FALSE) {};
+
+        $this->output->set_output($result);
+    }
+
+    public function get_dados_exames_paciente () {
         $access_token = $this->input->post('access_token');
         $id_paciente = $this->input->post('id_paciente');
 
-        $url = $this->lang->line('get_exame') . '?id_paciente=' . $id_paciente;
+        $url = $this->lang->line('endpoint_api_dados_exames_paciente') . '?id_paciente=' . $id_paciente;
 
         $options = array(
             'http' => array(

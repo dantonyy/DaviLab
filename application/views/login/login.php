@@ -22,10 +22,9 @@
 </head>
 
 <body>
-
 	<div class="limiter">
 
-		<div class="container-login100" action="<?php echo site_url('login/login/');?>"" method="post">
+		<div class="container-login100" >
 
 			<div class="wrap-login100">
 
@@ -33,7 +32,7 @@
 					<img src="<?php echo base_url();?>application/views/includes/assets/login_page/images/tubo.png" alt="IMG">
 				</div>
 
-				<form class="login100-form validate-form">
+				<form classs="login100-form validate-form" id="login_form" action="<?php echo base_url('login/login')?>" enctype="multipart/form-data" method="post" accept-charset="UTF-8">
 					<span class="login100-form-title">
 						<?php echo lang('davilab');?>
 					</span>
@@ -78,7 +77,7 @@
 
 			</div>
 
-		</form>
+		</div>
 
 	</div>
 
@@ -104,7 +103,9 @@
 	const queryString = window.location.search;
 	const urlParams = new URLSearchParams(queryString);
 
-    function login(){
+    $('#login_form').submit(function(event) {
+		event.preventDefault(); // Previne que seja enviado com modo padrão
+
         var email = document.getElementById('email').value;
         var senha = document.getElementById('senha').value;
         if(email == '' || senha == ''){
@@ -112,10 +113,17 @@
         }else{
             $.ajaxSetup({async:false});
             $.post("<?php echo site_url('login/login/');?>", {email:email, senha:senha}, function(data){
-                console.log(data);
                 switch(data){
                     case 'TRUE':
-                        location.replace("<?php echo base_url('dashboard');?>");
+                        $.ajaxSetup({async:false});
+						$.post("<?php echo site_url('auth/get_code_dashboard_app');?>",{},
+							function(data, status) {
+								if(data) {
+									// console.log(data);
+									location.replace(data);
+								}
+							} // Fecha function
+						); // fecha POST
                         break;
                     case 'FALSE: usuario nao encontrado':
                         var alerta = document.getElementById('alerta');
@@ -135,7 +143,7 @@
                 }
             });
         }
-    }
+    });
 </script>
 
 </html>
