@@ -137,7 +137,7 @@
                     </div>
 
                     <div class="tab-pane fade pt-3" id="enviar_exame">
-                    <form id="form_adicionar_exame" action="<?php echo base_url('exames/setExame')?>" enctype="multipart/form-data" method="post" accept-charset="UTF-8">
+                    <form id="form_adicionar_exame" action="<?php echo base_url('exames/setExame')?>" enctype="multipart/form-data" method="post" accept-charset="UTF-8" return="TRUE">
                     <input style="display: none" name="id_paciente" value="<?php echo $this->session->userdata('paciente_id')?>"/>
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label">
@@ -170,7 +170,7 @@
                                 <?php echo lang('arquivo');?>
                             </label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="file" accept=".pdf" id="file" name="file" required>
+                                <input class="form-control" type="file" accept=".pdf" id="arquivo_exame" name="arquivo_exame" required>
                             </div>
                         </div>
                         
@@ -306,7 +306,7 @@
 
         // Pega informações do formulário + anexa arquivo pra enviar post pro controller
         const formData = new FormData(form_adicionar_exame);
-        formData.append('file', $('#file')[0].files[0]);
+        formData.append('file', $('#arquivo_exame')[0].files[0]);
 
         $.ajax({
             url: '<?php echo site_url('exames/setExame/');?>',
@@ -316,19 +316,18 @@
             contentType: false,
             processData: false,
             success: function(response) {
-                console.log(response);
-                // swal({
-                //     title: '<?php echo lang('tudo_certo')?>',
-                //     text: '<?php echo lang('tudo_certo_msg')?>',
-                //     icon: 'success',
-                //     buttons : {
-                //         confirm: {
-                //         className : 'btn btn-success'
-                //         }
-                //     }
-                // }).then(function(){ 
-                //     location.reload();
-                // });
+                swal({
+                    title: '<?php echo lang('tudo_certo')?>',
+                    text: '<?php echo lang('tudo_certo_msg')?>',
+                    icon: 'success',
+                    buttons : {
+                        confirm: {
+                        className : 'btn btn-success'
+                        }
+                    }
+                }).then(function(){ 
+                    location.reload();
+                });
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 swal({

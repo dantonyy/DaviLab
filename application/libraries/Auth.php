@@ -230,7 +230,7 @@ class Auth {
     }
 
     public function getPacientesFHIR ($access_token,$id_laboratorio) {
-        $url = $this->ci->lang->line('endpoint_api_dados_pacientes_fhir') . '?id_laboratorio=' . $id_laboratorio;
+        $url = $this->ci->lang->line('endpoint_api_dados_pacientes_lista') . '?id_laboratorio=' . $id_laboratorio;
 
         $options = array(
             'http' => array(

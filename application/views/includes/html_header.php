@@ -222,15 +222,6 @@ $this->lang->load(['variaveis_lang','dashboard_lang','errors_html_lang'], 'portu
             <li class="nav-heading">
                 <?php echo lang('pacientes');?>
             </li>
-
-                <li class="nav-item">
-                    <a class="nav-link <?php if ($pagina != 'novo_paciente') {echo 'collapsed';};?>" href="<?php echo site_url('dashboard/novo_paciente');?>">
-                    <i class="bi bi-person-plus"></i>
-                    <span>
-                        <?php echo lang('novo_paciente');?>
-                    </span>
-                    </a>
-                </li>
                 
                 <li class="nav-item">
                     <a class="nav-link <?php if ($pagina != 'pacientes_lista') {echo 'collapsed';};?>" href=”” onclick="get_token_pacientes_lista();return false;">

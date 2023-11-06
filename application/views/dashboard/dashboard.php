@@ -47,7 +47,7 @@
 
                         </h5>
 
-                        <button type="button" class="btn btn-primary btn-lg" onclick="get_code_exames_lista()" >
+                        <button type="button" class="btn btn-primary btn-lg" onclick="get_token_exames_lista();">
                             <?php echo lang('acessar');?>
                         </button>
                         

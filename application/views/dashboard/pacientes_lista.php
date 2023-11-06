@@ -51,7 +51,7 @@
                                         <input style="display:none" name="paciente_nome" value="' . $paciente->name->given . '"/>
                                         <input style="display:none" name="paciente_sobrenome" value="' . $paciente->name->family . '"/>
                                         <input style="display:none" name="paciente_email" value="' . $paciente->telecom[0]->value . '"/>
-                                        <input style="display:none" name="paciente_celular" value="' . $paciente->telecom[0]->value . '"/>
+                                        <input style="display:none" name="paciente_celular" value="' . $paciente->telecom[1]->value . '"/>
                                         ';
                                     echo '<button class="btn" type="submit"><i class="bi bi-person"></i></button>';
                                     echo '</form>';

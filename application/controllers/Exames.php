@@ -41,27 +41,32 @@ class Exames extends CI_Controller {
             // Pegar dados do usuário que está fazendo a requisição
             $dados_usuario = $this->dashboard_model->getDadosFuncionario($this->session->userdata('id_usuario_autenticacao'));
             $id_laboratorio_possui_usuario = $dados_usuario->id_laboratorio_possui_usuario;
+            $id_paciente = $this->input->post('id_paciente');
+            $nome_exame = $this->input->post('nome_exame');
+            $profissional = $this->input->post('profissional');
 
             // Dados do arquivo que está fazendo upload
-            $nome_arquivo = urldecode($_FILES['file']['name']);
-            $extensao = substr($nome_arquivo, strrpos($nome_arquivo, "."));
+            $arquivo = explode('.', $_FILES['arquivo_exame']['name']);
+            $nome = $arquivo[0];
+            $extensao = $arquivo[1];
+            $nome_arquivo = $id_paciente . '_' . $nome_exame . '_' . $profissional . '_' . $this->gerarToken();
 
             $config['upload_path']          =  __DIR__."/../arquivos_upload/arquivos_exames/";
             $config['allowed_types']        = 'pdf';
             $config['file_name']            = $nome_arquivo;
             $this->load->library('upload', $config);
-
-            if ( ! $this->upload->do_upload('file')) {
+            
+            if ( ! $this->upload->do_upload('arquivo_exame')) {
                 $error = array('error' => $this->upload->display_errors());
-                $this->output->set_output($error);
+                $this->output->set_output(json_encode($error));
             } else {
                 $api_url = $this->lang->line('endpoint_api_novoExameArquivo');
-                $file_path = __DIR__."/../arquivos_upload/arquivos_exames/" . $nome_arquivo;
+                $file_path = __DIR__."/../arquivos_upload/arquivos_exames/" . $nome_arquivo . '.' . $extensao;
                 $file_data = file_get_contents($file_path);
-
+                
                 if (file_exists($file_path)) {
-                    $cFile = curl_file_create($file_path, 'application/pdf', $nome_arquivo);
-                    
+                    $cFile = curl_file_create($file_path, 'application/pdf', $nome_arquivo . '.' .  $extensao);
+
                     $postData = array(
                         'file' => $cFile
                     );
@@ -78,9 +83,9 @@ class Exames extends CI_Controller {
                         echo 'Erro ao enviar o arquivo: ' . curl_error($ch);
                     } else {
                         $dados_exame = array (
-                            'id_paciente' => $this->input->post('id_paciente'),
-                            'nome_exame' => $this->input->post('nome_exame'),
-                            'profissional' => $this->input->post('profissional'),
+                            'id_paciente' => $id_paciente,
+                            'nome_exame' => $nome_exame,
+                            'profissional' => $profissional,
                             'data_realizacao' => $this->input->post('data_exame'),
                             'laudo' => $this->input->post('laudo'),
                             'nome_arquivo' => $nome_arquivo,
@@ -89,8 +94,9 @@ class Exames extends CI_Controller {
                             'status_exame' => 1, // 1 - Pendente : Padrão que deve ser alterado a cada interação do paciente com o exame
                             'comentarios_recusa' => ($this->input->post('comentarios_recusa') != '') ? $this->input->post('comentarios_recusa') : ''
                         );
-            
+
                         $adiciona_exame = $this->exames_model->setPacienteExameArquivo($dados_exame);
+
                         if ($this->output->set_output($adiciona_exame)) {
                             if ($this->setExameAPI($dados_exame)) {
                                 return TRUE;
@@ -114,8 +120,8 @@ class Exames extends CI_Controller {
             "id_usuario_autenticacao" => $dados_exame['id_paciente'],
             "laudo" => $dados_exame['laudo'],
             "nome_exame" => $dados_exame['nome_exame'],
-            "nome_arquivo" => "teste",
-            "extensao" => ".pdf",
+            "nome_arquivo" => $dados_exame['nome_arquivo'],
+            "extensao" => $dados_exame['extensao'],
             "profissional" => $dados_exame['profissional'],
             "data_realizacao" => $dados_exame['data_realizacao'],
             "id_laboratorio_possui_usuario" => $dados_exame['id_laboratorio_possui_usuario'],
@@ -158,6 +164,17 @@ class Exames extends CI_Controller {
             return TRUE;
         }else{
             return FALSE;
+        }
+    }
+
+    public function gerarToken($tamanho = 32) {
+        if($this->autenticarUsuario()){
+            // $random_string = uniqid();
+            $random_number = mt_rand(1000, 9999);
+            // return $random_string . '_' . $random_number;
+            return $random_number;
+        }else{
+            redirect('login');
         }
     }
 
