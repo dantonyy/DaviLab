@@ -39,14 +39,14 @@
 // ----------------------------------------------- APP VARIAVEIS ----------------------------------------------------
 // Importante lembrar que o client_secret deve ser copiado no momento de registrar aplicação, antes que fique criptografado
 
-    $lang['client_id'] = "girIMRFfNWVGD7uzK7QEsE8oJmtUdzXIcrxrjAmR";
-    $lang['client_secret'] = "9siRj4kr751jGYZQbVuhAhN8aZgq8Wo8FqwhzTDNrLY9ES4IwH6Aq2fP8GEuEKrcT9qpYyO62d83ps1pEJRiAHfJUKj3QniIST2pceANPNClG1BFQoAcmCapGMXpby33";
+    $lang['client_id'] = "1f0O0OjCWTLwvHenINqRXvSrk4ClgTsO1xCAvLZd";
+    $lang['client_secret'] = "5BO5itPD2UHVAuhnpwvJHfe4d8bN5LStZyBLv7AdhSTMgNY5Nv6hbLSbA4J3H7d8zTOTbz4EmTS4wsu7avhstsT1u0l69SroTrxnckfsiEq6v4BWQ30MEQefOaVn5yDe";
 
-    $lang['exames_id'] = "dhvOC5wkn1S1AOKTzM7KMsBBKVR3S0V03Ent3S0d";
-    $lang['exames_secret'] = "T70A2du2QUvG2ULi4IPj3txPJuU2wyTL0WNYRHLLEOVIrw07P6XP7znxZ65uS1ONczjfYoGckqwRcn3UxRNrJamF8tkN4nvJ1EjhVz4IMzSFllz7nJkTKsuuuzz91JGB";
+    $lang['exames_id'] = "vzoF3rzpTfDiv1H7tfAg4EWUxfsEvA2FwUHWhFcI";
+    $lang['exames_secret'] = "rTZLC17ae5vuMB4ohIvZYEbdNklgSYcdlDU8i1l58IliLW7QyRGukKhHfZzrnwVVUBfSYJQoRefZS310anTchgFEcaJo4zqJqtkeG0bA6Vy75N6iMOoRXGKYAOOarwYn";
 
-    $lang['exames_lista_id'] = "bj2F7fWknemhQQInKR7U6RrGyBNH8Mqf0S42kJm3";
-    $lang['exames_lista_secret'] = "h6cX89GQyL74iNHsV3mbFdz9t5GMJA7T3zBTrdkFlbwXxM815BpcK9JheG4sIr0Fzha7LNBUeuqws91W5R3zG8chXOopeyieAFtIf1I8KXs3TSaQLQfTWYiNRRfjYdTD";
+    $lang['exames_lista_id'] = "1xGDwsKBoFjs60PuLZfGl4RKWF7iC7z9lwu4SwCw";
+    $lang['exames_lista_secret'] = "Svz44heRyjJIND6zcgScToP6Z50zupvyb7epdGxhkWLoPs0fIBaFLTZAaaVMwOz3B6A9tRnzdwOwxNVEm4kgCle5o39mhlsQvvv0hIQUAQhTGlzLYc96ovpvRV7fzbbd";
 
     $lang['foto_perfil'] = "";
 ?>

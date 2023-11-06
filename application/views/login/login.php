@@ -32,7 +32,8 @@
 					<img src="<?php echo base_url();?>application/views/includes/assets/login_page/images/tubo.png" alt="IMG">
 				</div>
 
-				<form classs="login100-form validate-form" id="login_form" action="<?php echo base_url('login/login')?>" enctype="multipart/form-data" method="post" accept-charset="UTF-8">
+				<!-- <form classs="login100-form validate-form" id="login_form" action="<?php echo base_url('login/login')?>" enctype="multipart/form-data" method="post" accept-charset="UTF-8"> -->
+				<form classs="login100-form validate-form" id="login_form">
 					<span class="login100-form-title">
 						<?php echo lang('davilab');?>
 					</span>
@@ -53,7 +54,7 @@
 						</span>
 					</div>
 					<div class="container-login100-form-btn">
-						<button class="login100-form-btn" type="submit" onclick="login()">
+						<button class="login100-form-btn" type="submit" >
 							<?php echo lang('entrar');?>
 						</button>
 					</div>
@@ -113,7 +114,7 @@
         }else{
             $.ajaxSetup({async:false});
             $.post("<?php echo site_url('login/login/');?>", {email:email, senha:senha}, function(data){
-                switch(data){
+				switch(data){
                     case 'TRUE':
                         $.ajaxSetup({async:false});
 						$.post("<?php echo site_url('auth/get_code_dashboard_app');?>",{},
